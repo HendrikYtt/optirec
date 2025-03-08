@@ -1,4 +1,4 @@
-# OptRec
+# OptiRec
 
 Recommender Engines as a Software-as-a-Service Platform.
 
