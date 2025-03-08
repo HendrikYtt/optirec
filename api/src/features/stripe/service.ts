@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 import { getStripeCustomer, insertCheckoutSession, insertStripeCustomer } from './repository';
 
 export const stripe = new Stripe(
-    'sk_test_51MafzPBmmU0p4Zl2VwhDpzd9FeVeneQ0j0Oc6UZUFECpsPDIxKXuDPMMkiRW3XI2jndC34BA0AwTvJkEsJKcS9jd00l3yYbE1B',
+    process.env.STRIPE_SECRET_KEY,
     {
         apiVersion: '2022-11-15',
         typescript: true,
