@@ -1,0 +1,42 @@
+{{/* vim: set filetype=mustache: */}}
+
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "mlflow.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "mlflow.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
+Common labels
+*/}}
+{{- define "mlflow.labels" -}}
+release: {{ .Release.Name }}
+chart: {{ include "mlflow.chart" . }}
+heritage: {{ .Release.Service }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Selector labels
+*/}}
+{{- define "mlflow.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "mlflow.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "mlflow.server-service-name" -}}
+mlflow-server
+{{- end }}
+
+{{- define "mlflow.server-service-account-name" -}}
+{{ default "mlflow-server" .Values.serviceAccount.name }}
+{{- end}}

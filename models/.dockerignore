@@ -1,0 +1,11 @@
+__pycache__/
+.venv/
+venv/
+.idea/
+.ipynb_checkpoints/
+
+/data/
+/models/
+/notebooks/
+
+/.env

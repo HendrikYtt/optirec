@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: redis-pubsub
+    namespace: nrocinu
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: redis-pubsub
+    template:
+        metadata:
+            labels:
+                app: redis-pubsub
+        spec:
+            containers:
+                - name: redis-pubsub
+                  image: redis:latest
+                  imagePullPolicy: Always
+                  ports:
+                      - name: redis-pubsub
+                        containerPort: 6379

@@ -1,0 +1,9 @@
+bases:
+  - ../../kubernetes
+configMapGenerator:
+  - name: generic
+    literals:
+      - NODE_ENV=stage
+      - ORIGIN=https://www.optirec.ml,https://warmbet.optirec.ml,http://warmbet.optirecdev.ml,http://localhost:3001
+generatorOptions:
+  disableNameSuffixHash: true

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin
+  namespace: nrocinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+        - name: pgadmin
+          image: dpage/pgadmin4:latest
+          imagePullPolicy: Always
+          env:
+            - name: PGADMIN_LISTEN_ADDRESS
+              value: 0.0.0.0
+          envFrom:
+            - secretRef:
+                name: pgadmin-secret
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: pgadmin-storage
+              mountPath: /var/lib/pgadmin
+      volumes:
+        - name: pgadmin-storage
+          hostPath:
+            path: /opt/nrocinu/pgadmin

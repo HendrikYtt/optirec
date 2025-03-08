@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: nrocinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"
+        prometheus.io/path: /metrics
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: registry.optirec.ml/api:latest
+          imagePullPolicy: Always
+          env:
+            - name: API_PORT
+              value: "3000"
+            - name: SERVICE
+              value: web
+            - name: DB_HOST
+              value: "postgres"
+            - name: MODELS_HOST
+              value: "http://models"
+            - name: RABBITMQ_HOST
+              value: "rabbitmq"
+            - name: PLAYGROUND_APP_ID
+              value: "7"
+          envFrom:
+            - configMapRef:
+                name: generic
+            - secretRef:
+                name: rabbitmq-secret
+          ports:
+            - name: http
+              containerPort: 3000
+          readinessProbe:
+            tcpSocket:
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http

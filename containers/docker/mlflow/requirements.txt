@@ -1,0 +1,4 @@
+boto3
+matplotlib
+mlflow[extras]
+psycopg2-binary

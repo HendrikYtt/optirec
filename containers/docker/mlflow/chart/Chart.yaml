@@ -1,0 +1,12 @@
+apiVersion: v2
+name: mlflow
+description: A Helm chart for Kubernetes
+
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+# Should reflect the version the application is using.
+appVersion: 1.25.1

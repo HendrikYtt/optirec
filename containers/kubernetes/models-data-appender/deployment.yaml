@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: models-data-appender
+    namespace: nrocinu
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: models-data-appender
+    template:
+        metadata:
+            labels:
+                app: models-data-appender
+        spec:
+            containers:
+                - name: models-data-appender
+                  image: registry.optirec.ml/models-data-appender:latest
+                  imagePullPolicy: Always
+                  env:
+                      - name: SERVICE
+                        value: 'data_appender'
+                      - name: DATA_PATH
+                        value: '/opt/data'
+                      - name: DB_HOST
+                        value: 'postgres'
+                      - name: REDIS_PUBSUB_HOST
+                        value: 'redis-pubsub'
+                      - name: RABBITMQ_HOST
+                        value: 'rabbitmq'
+                  envFrom:
+                    - configMapRef:
+                        name: generic
+                    - secretRef:
+                        name: rabbitmq-secret
+                  volumeMounts:
+                      - name: data-storage
+                        mountPath: /opt/data
+            volumes:
+                - name: data-storage
+                  hostPath:
+                    path: /opt/nrocinu/data

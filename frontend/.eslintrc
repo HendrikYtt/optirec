@@ -1,0 +1,35 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "plugin:promise/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "prettier", "import", "prefer-arrow", "promise"],
+    "rules": {
+        "prettier/prettier": ["error"],
+        "import/no-default-export": ["error"],
+        "import/order": [
+            "error",
+            {
+                "newlines-between": "never"
+            }
+        ],
+        "import/no-named-as-default": ["off"],
+        "prefer-arrow/prefer-arrow-functions": ["error"],
+        "promise/prefer-await-to-then": ["error"]
+    },
+    "settings": {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": true
+        }
+    },
+    "root": true
+}

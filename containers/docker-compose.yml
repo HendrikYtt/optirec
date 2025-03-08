@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+    postgres:
+        container_name: postgres
+        image: postgres:14
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: postgres
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        command: -c fsync=off
+    redis-pubsub:
+        container_name: redis-pubsub
+        image: redis:latest
+        restart: always
+        ports:
+            - 6379:6379
+    rabbitmq:
+        container_name: rabbitmq
+        image: rabbitmq:3-management
+        restart: always
+        environment:
+            RABBITMQ_DEFAULT_USER: admin
+            RABBITMQ_DEFAULT_PASS: admin
+        ports:
+            - 5672:5672
+            - 15672:15672
+volumes:
+    postgres_data:

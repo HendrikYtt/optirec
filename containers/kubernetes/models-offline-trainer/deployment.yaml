@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: models-offline-trainer
+    namespace: nrocinu
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: models-offline-trainer
+    template:
+        metadata:
+            labels:
+                app: models-offline-trainer
+        spec:
+            containers:
+                - name: models-offline-trainer
+                  image: registry.optirec.ml/models-offline-trainer:latest
+                  imagePullPolicy: Always
+                  env:
+                      - name: SERVICE
+                        value: 'offline_trainer'
+                      - name: MODELS_PATH
+                        value: '/opt/models'
+                      - name: DATA_PATH
+                        value: '/opt/data'
+                      - name: DB_HOST
+                        value: 'postgres'
+                      - name: REDIS_PUBSUB_HOST
+                        value: 'redis-pubsub'
+                  envFrom:
+                    - configMapRef:
+                        name: generic
+                    - secretRef:
+                        name: rabbitmq-secret
+                  volumeMounts:
+                      - name: models-storage
+                        mountPath: /opt/models
+                      - name: data-storage
+                        mountPath: /opt/data
+            volumes:
+                - name: models-storage
+                  hostPath:
+                    path: /opt/nrocinu/models
+                - name: data-storage
+                  hostPath:
+                    path: /opt/nrocinu/data

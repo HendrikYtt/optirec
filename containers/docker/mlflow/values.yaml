@@ -1,0 +1,50 @@
+image:
+  repository: "registry.optirec.ml/mlflow"
+  tag: "latest"
+  pullPolicy: Always
+
+mlflow:
+  defaultArtifactRoot: "./artifacts"
+  backendStoreUriSecretName: "mlflow"
+  workers: 1
+
+serviceAccount:
+  create: false
+  name: ""
+  annotations: {}
+
+ingress:
+  enabled: true
+  name: "mlflow"
+  ingressClassName: public
+  path: /*
+
+service:
+  type: ClusterIP
+  port: 2202
+
+resources:
+   limits:
+    cpu: 2
+    memory: 4Gi
+   requests:
+    cpu: 2
+    memory: 4Gi
+
+nameOverride: ""
+
+fullnameOverride: ""
+
+imagePullSecrets: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

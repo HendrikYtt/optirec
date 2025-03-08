@@ -1,0 +1,130 @@
+bases:
+  - ../../kubernetes
+configMapGenerator:
+  - name: generic
+    literals:
+      - NODE_ENV=development
+      - ORIGIN=http://www.optirecdev.ml,http://warmbet.optirecdev.ml,http://localhost:3001
+secretGenerator:
+  - name: rabbitmq-secret
+    literals:
+      - RABBITMQ_PASS=admin
+      - RABBITMQ_USER=admin
+  - name: postgres
+    literals:
+      - DATA_SOURCE_PASS=postgres
+      - DATA_SOURCE_USER=postgres
+      - POSTGRES_DB=nrocinu
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+  - name: pgadmin-secret
+    literals:
+      - PGADMIN_DEFAULT_EMAIL=postgres@example.com
+      - PGADMIN_DEFAULT_PASSWORD=postgres
+generatorOptions:
+  disableNameSuffixHash: true
+patchesJson6902:
+  - target:
+      name: api
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: api.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx
+  - target:
+      name: frontend
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: www.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx
+  - target:
+      name: integrations
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: integrations.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx
+  - target:
+      name: pgadmin
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: pgadmin.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx
+  - target:
+      name: pusher
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: pusher.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx
+  - target:
+      name: rabbitmq
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: rabbitmq.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx
+  - target:
+      name: registry
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: registry.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx
+  - target:
+      name: warmbet
+      kind: Ingress
+      version: v1
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /spec/rules/0/host
+        value: warmbet.optirecdev.ml
+      - op: replace
+        path: /spec/ingressClassName
+        value: nginx

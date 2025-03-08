@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api
+  namespace: nrocinu
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 5G
+    nginx.ingress.kubernetes.io/proxy-read-timeout: 3600s
+    nginx.ingress.kubernetes.io/proxy-send-timeout: 3600s
+spec:
+  ingressClassName: public
+  rules:
+    - host: api.optirec.ml
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 80
+  tls:
+    - secretName: tls-secret

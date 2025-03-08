@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: models
+  namespace: nrocinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: models
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: /metrics
+      labels:
+        app: models
+    spec:
+      containers:
+        - name: models
+          image: registry.optirec.ml/models:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE
+              value: "app"
+            - name: DB_HOST
+              value: "postgres"
+            - name: MODELS_PATH
+              value: "/opt/models"
+            - name: DATA_PATH
+              value: "/opt/data"
+            - name: UWSGI_LISTEN
+              value: "1024"
+            - name: REDIS_PUBSUB_HOST
+              value: "redis-pubsub"
+            - name: RABBITMQ_HOST
+              value: "rabbitmq"
+          envFrom:
+            - configMapRef:
+                name: generic
+          ports:
+            - name: http
+              containerPort: 8000
+          readinessProbe:
+            tcpSocket:
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+          volumeMounts:
+            - name: models-storage
+              mountPath: /opt/models
+            - name: data-storage
+              mountPath: /opt/data
+      volumes:
+        - name: models-storage
+          hostPath:
+            path: /opt/nrocinu/models
+        - name: data-storage
+          hostPath:
+            path: /opt/nrocinu/data

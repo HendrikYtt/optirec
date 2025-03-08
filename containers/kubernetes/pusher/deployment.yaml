@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pusher
+  namespace: nrocinu
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pusher
+  template:
+    metadata:
+      labels:
+        app: pusher
+    spec:
+      containers:
+        - name: pusher
+          image: registry.optirec.ml/pusher:latest
+          imagePullPolicy: Always
+          env:
+            - name: SERVICE
+              value: pusher
+            - name: REDIS_HOST
+              value: "redis-pubsub"
+          envFrom:
+            - configMapRef:
+                name: generic
+          ports:
+            - name: http
+              containerPort: 3000
+          readinessProbe:
+            tcpSocket:
+              port: http
+          livenessProbe:
+            tcpSocket:
+              port: http

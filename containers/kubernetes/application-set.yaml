@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: optirec
+spec:
+  generators:
+    - git:
+        repoURL: ssh://git@github.com/HendrikYtt/optirec.git
+        revision: HEAD
+        files:
+          - path: "containers/kubernetes/**/deployment.yaml"
+  template:
+    metadata:
+      name: "{{metadata.name}}"
+      annotations:
+        argocd-image-updater.argoproj.io/image-list: image=registry.optirec.ml/{{spec.template.spec.containers.0.name}}:latest
+        argocd-image-updater.argoproj.io/image.update-strategy: latest
+        argocd-image-updater.argoproj.io/write-back-target: kustomization
+        argocd-image-updater.argoproj.io/write-back-method: git
+        argocd-image-updater.argoproj.io/git-branch: main
+    spec:
+      project: optirec-stage
+      source:
+        repoURL: ssh://git@github.com/HendrikYtt/optirec.git
+        targetRevision: HEAD
+        path: "{{path}}"
+      destination:
+        name: stage
+        namespace: nrocinu
+  syncPolicy:
+    preserveResourcesOnDeletion: true

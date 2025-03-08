@@ -1,0 +1,36 @@
+### /load
+POST http://localhost:5000/schemas/apps_23/load
+
+### /train
+POST http://localhost:5000/schemas/apps_23/models/recent/train
+###
+POST http://localhost:5000/schemas/apps_23/models/popularity/train
+###
+POST http://localhost:5000/schemas/apps_23/models/popularity-by-country/train
+###
+POST http://localhost:5000/schemas/apps_23/models/attribute/train
+###
+POST http://localhost:5000/schemas/apps_23/models/rating/train
+###
+POST http://localhost:5000/schemas/apps_23/models/als/train
+
+### /users/:id/items
+GET http://localhost:5000/schemas/apps_23/models/als/users/test-1/items
+###
+GET http://localhost:5000/schemas/apps_23/models/attribute/users/1/items
+
+### /items
+GET http://localhost:5000/schemas/apps_23/models/popularity/items
+###
+GET http://localhost:5000/schemas/apps_23/models/popularity-by-country/items?country=EE
+###
+GET http://localhost:5000/schemas/apps_23/models/rating/items
+
+### /users/:id/topics
+GET http://localhost:5000/schemas/apps_23/users/test-13/topics
+
+### /playground
+POST http://localhost:5000/schemas/apps_23/playground
+Content-Type: application/json
+
+[2298983, 2187878]
